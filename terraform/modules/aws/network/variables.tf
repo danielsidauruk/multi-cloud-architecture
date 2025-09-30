@@ -15,21 +15,7 @@ variable "az_count" {
   type        = number
 }
 
-variable "aws_vpn_gateway" {
-  description = "AWS Virtual VPN Gateway"
+variable "vgw_id" {
+  description = "AWS VPN Gateway ID"
   type        = string
 }
-# variable "aws_asn" {
-#   description = "AWS BGP ASN"
-#   type        = number
-# }
-
-# variable "gcp_vpn_interfaces" {
-#   description = "Google Cloud HA VPN Interfaces public-ip"
-#   type        = list(string)
-# }
-
-# variable "gcp_asn" {
-#   description = "GCP Router BGP ASN"
-#   type        = number
-# }
