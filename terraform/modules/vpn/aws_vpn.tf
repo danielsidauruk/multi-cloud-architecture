@@ -1,29 +1,26 @@
 
 locals {
-  gcp_vpn_interface_ips = {
-    for interface in google_compute_ha_vpn_gateway.gcp.vpn_interfaces :
-    interface.id => interface.ip_address
-  }
+  gcp_vpn_interface_ips = [
+    for interface in google_compute_ha_vpn_gateway.gcp_vpn_gateway.vpn_interfaces :
+    interface.ip_address
+  ]
 }
 
-# Customer Gateway for GCP
-resource "aws_customer_gateway" "gcp" {
-  for_each = local.gcp_vpn_interface_ips
+# GCP Gateway
+resource "aws_customer_gateway" "gcp_vpn_gateway" {
+  count = 2
 
   bgp_asn    = var.gcp_asn
-  ip_address = each.value
+  ip_address = local.gcp_vpn_interface_ips[count.index]
   type       = "ipsec.1"
 
-  depends_on = [google_compute_ha_vpn_gateway.gcp]
-
   tags = {
-    Name = "Customer Gateway ${each.key} (GCP HA VPN)"
+    Name = "Customer Gateway ${count.index} (GCP HA VPN)"
   }
 }
 
-
 # VPN Gateway & Connection
-resource "aws_vpn_gateway" "aws" {
+resource "aws_vpn_gateway" "aws_vpn_gateway" {
   vpc_id          = var.aws_vpc_id
   amazon_side_asn = var.aws_asn # 65001
 
@@ -32,15 +29,15 @@ resource "aws_vpn_gateway" "aws" {
   }
 }
 
-resource "aws_vpn_connection" "aws_to_gcp" {
-  for_each = aws_customer_gateway.gcp
+resource "aws_vpn_connection" "aws_to_gcp_vpn" {
+  count = 2
 
-  vpn_gateway_id      = aws_vpn_gateway.aws.id
-  customer_gateway_id = each.value.id
+  vpn_gateway_id      = aws_vpn_gateway.aws_vpn_gateway.id
+  customer_gateway_id = aws_customer_gateway.gcp_vpn_gateway[count.index].id
   type                = "ipsec.1"
   static_routes_only  = false
 
   tags = {
-    Name = "AWS VPN Connection ${each.key}"
+    Name = "AWS VPN Connection ${count.index}"
   }
 }

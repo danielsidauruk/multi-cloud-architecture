@@ -5,5 +5,15 @@ output "vpc_id" {
 
 output "availability_zones" {
   description = "VPC Availability Zones."
-  value       = local.azs_random
+  value       = data.aws_availability_zones.available.names
+}
+
+output "public_subnet_ids" {
+  description = "List of Public Subnet IDs"
+  value       = [for subnet in aws_subnet.public : subnet.id]
+}
+
+output "private_subnet_ids" {
+  description = "List of Private Subnet IDs"
+  value       = [for subnet in aws_subnet.private : subnet.id]
 }

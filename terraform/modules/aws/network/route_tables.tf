@@ -8,15 +8,17 @@ resource "aws_route_table" "public" {
     gateway_id = aws_internet_gateway.main.id
   }
 
+  propagating_vgws = [var.vgw_id]
+
   tags = {
-    Name = "rt-public"
+    Name = "Route Table Public"
   }
 }
 
 resource "aws_route_table_association" "public" {
-  for_each = aws_subnet.public
+  count = var.az_count
 
-  subnet_id      = each.value.id
+  subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
 
@@ -33,13 +35,13 @@ resource "aws_route_table" "private" {
   propagating_vgws = [var.vgw_id]
 
   tags = {
-    Name = "rt-private"
+    Name = "Route Table Private"
   }
 }
 
 resource "aws_route_table_association" "private" {
-  for_each = local.private_subnets
+  count = var.az_count
 
-  subnet_id      = aws_subnet.private[each.key].id
+  subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
 }

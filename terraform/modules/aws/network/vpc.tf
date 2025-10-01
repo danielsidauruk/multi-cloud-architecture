@@ -8,12 +8,3 @@ resource "aws_vpc" "main" {
     Name = "vpc-main"
   }
 }
-
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
-resource "random_shuffle" "az" {
-  input        = data.aws_availability_zones.available.names
-  result_count = var.az_count
-}

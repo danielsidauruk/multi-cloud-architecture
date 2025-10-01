@@ -29,6 +29,11 @@ variable "aws_asn" {
   type        = number
 }
 
+variable "key_name" {
+  description = "AWS Key Pair for ssh to VM"
+  type        = string
+}
+
 #==============================================================================
 # GCP Configuration
 #==============================================================================
