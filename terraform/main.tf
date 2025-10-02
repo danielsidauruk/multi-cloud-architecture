@@ -31,6 +31,18 @@ module "aws_vm" {
   public_subnet_ids = module.aws_network.public_subnet_ids
 }
 
+module "aws_database" {
+  source = "./modules/aws/database"
+
+  cidr_block           = var.cidr_block
+  db_name              = var.db_name
+  db_username          = var.db_username
+  db_username_password = var.db_username_password
+
+  vpc_id             = module.aws_network.vpc_id
+  private_subnet_ids = module.aws_network.private_subnet_ids
+}
+
 # GCP
 module "google_services" {
   source = "./modules/gcp/google-services"
@@ -39,10 +51,10 @@ module "google_services" {
 module "gcp_network" {
   source = "./modules/gcp/network"
 
-  vpc_name   = var.vpc_name
-  region     = var.gcp_region
-  az_count   = var.az_count
-  cidr_block = cidrsubnet(var.cidr_block, 1, 1)
+  vpc_name     = var.vpc_name
+  region       = var.gcp_region
+  subnet_count = var.subnet_count
+  cidr_block   = cidrsubnet(var.cidr_block, 1, 1)
 
   depends_on = [module.google_services]
 }
