@@ -90,3 +90,9 @@ variable "gcp_asn" {
   description = "GCP Router BGP ASN."
   type        = number
 }
+
+variable "root_password" {
+  description = "CloudSQL Root User Password."
+  type        = string
+  sensitive   = true
+}

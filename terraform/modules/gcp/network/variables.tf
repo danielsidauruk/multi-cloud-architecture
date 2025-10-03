@@ -4,12 +4,12 @@ variable "vpc_name" {
 }
 
 variable "region" {
-  description = "The region where the network and subnets will be created"
+  description = "GCP Region."
   type        = string
 }
 
-variable "az_count" {
-  description = "The number of availability zones to use."
+variable "subnet_count" {
+  description = "Number of subnet(s)."
   type        = number
 }
 

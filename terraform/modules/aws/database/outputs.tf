@@ -1,6 +1,6 @@
 output "db_instance_address" {
   description = "Database Instance Address (Endpoint)."
-  value = aws_db_instance.postgres_primary_instance.address
+  value       = aws_db_instance.postgres_primary_instance.address
 }
 
 output "db_instance_port" {

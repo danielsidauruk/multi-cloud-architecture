@@ -1,13 +1,13 @@
 # General
 variable "region" {
-  description = "The primary AWS region."
+  description = "AWS region."
   type        = string
 }
 
 # VPC
 variable "cidr_block" {
   type        = string
-  description = "The CIDR block of the VPC where resources will be deployed."
+  description = "VPC CIDR Block"
 }
 
 variable "az_count" {
@@ -16,6 +16,6 @@ variable "az_count" {
 }
 
 variable "vgw_id" {
-  description = "AWS VPN Gateway ID"
+  description = "AWS VPN Gateway ID."
   type        = string
 }

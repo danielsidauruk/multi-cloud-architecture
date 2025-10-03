@@ -71,3 +71,22 @@ module "gcp_vm" {
 
   depends_on = [module.google_services]
 }
+
+module "gcp_database" {
+  source = "./modules/gcp/database"
+
+  project_id                = var.gcp_project_id
+  region                    = var.gcp_region
+  db_name                   = var.db_name
+  replication_user          = var.replication_user
+  replication_user_password = var.replication_user_password
+  root_password             = var.root_password
+
+  rds_instance_address = module.aws_database.db_instance_address
+  vpc_self_link        = module.gcp_network.vpc_self_link
+
+  depends_on = [
+    module.google_services,
+    module.gcp_network
+  ]
+}
